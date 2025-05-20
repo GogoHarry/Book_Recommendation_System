@@ -108,11 +108,14 @@ book-recommender/
 - scikit-learn
 - altair
 
+---
+
 👨‍💻 Author
+---
 
-Developed by Gogo Harrison
+ Developed by Gogo Harrison
 
-Powered by 3MTT, Streamlit, Scikit-learn & Altair
+ Powered by 3MTT, Streamlit, Scikit-learn & Altair
 
 ## 📬 Connect with Me
 
