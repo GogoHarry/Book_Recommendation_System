@@ -86,7 +86,7 @@ book-recommender/
 ## ⚙️ Getting Started
 1. Clone the repo:
    ```bash
-   git clone https://github.com/GogoHarry/Book_Recommendation_System-Collaborative_Filtering.git
+   git clone https://github.com/GogoHarry/Book_Recommendation_System.git
    cd book-recommender
 
 2. Install dependencies:
