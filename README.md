@@ -76,9 +76,12 @@ book-recommender/
 │   ├── books.csv
 │   └── ratings.csv
 ├── requirements.txt       # Python dependencies
+├── notebooks/             # notebooks containing eda and modelling
+├── book_recommendation_EDA.ipynb
+└── books_recommendation_modelling.ipynb
 ├── screenshots/           # App screenshots for README
-│   ├── home.png
-│   └── recommendations.png
+│   ├── home.jpeg
+│   └── recommendations.jpeg
 └── README.md              # Project documentation
 ```
 
