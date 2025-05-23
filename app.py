@@ -7,6 +7,34 @@ import altair as alt
 # -------------------- Page Config -------------------- #
 st.set_page_config(page_title="📚 Book Recommender", layout="wide")
 
+# -------------------- Background Styling -------------------- #
+import base64
+from pathlib import Path
+
+def get_base64_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
+local_image_path = "images/3mtt.png"
+base64_img = get_base64_image(local_image_path)
+
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background: 
+            linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), 
+            url("data:image/jpeg;base64,{base64_img}");
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # -------------------- Load Data -------------------- #
 @st.cache_data
 def load_default_data():
@@ -14,22 +42,7 @@ def load_default_data():
     books_df = pd.read_csv("data/books.csv")
     return ratings_df, books_df
 
-def load_custom_data(uploaded_ratings, uploaded_books):
-    ratings_df = pd.read_csv(uploaded_ratings)
-    books_df = pd.read_csv(uploaded_books)
-    return ratings_df, books_df
-
-# -------------------- Sidebar Uploads -------------------- #
-with st.sidebar:
-    st.header("📁 Upload Custom Data")
-    uploaded_ratings = st.file_uploader("Upload `ratings.csv`", type=["csv"])
-    uploaded_books = st.file_uploader("Upload `books.csv`", type=["csv"])
-
-if uploaded_ratings and uploaded_books:
-    ratings_df, books_df = load_custom_data(uploaded_ratings, uploaded_books)
-    st.sidebar.success("Custom data loaded!")
-else:
-    ratings_df, books_df = load_default_data()
+ratings_df, books_df = load_default_data()
 
 # -------------------- Preprocess Data -------------------- #
 def build_user_item_matrix(ratings, n_rows=10000):
@@ -69,7 +82,6 @@ def recommend_books(user_id, user_item_matrix, similarity_matrix, books_df, n_re
     similar_users = similarity_matrix.loc[user_id].sort_values(ascending=False)[1:]
     similar_users_ratings = user_item_matrix.loc[similar_users.index]
 
-    # Safeguard: Avoid division by zero if similarity sum is 0
     similarity_sum = similar_users.sum()
     if similarity_sum == 0:
         return pd.DataFrame(columns=['book_id', 'title', 'authors', 'score', 'image_url'])
@@ -90,9 +102,13 @@ def recommend_books(user_id, user_item_matrix, similarity_matrix, books_df, n_re
 # -------------------- UI Layout -------------------- #
 st.title("📚 AI Powered Book Recommendation System")
 st.markdown("""
-Welcome to the personalized **Book Recommendation App** powered by **User-Based Collaborative Filtering**!
+### Welcome to the personalized **Book Recommendation App**
+            
+Discover your next great read with our intelligent recommendation system powered by **User-Based Collaborative Filtering**.
+            
+By analyzing the reading preferences of users with similar interests, this app suggests books tailored to your taste.
 
-Upload your data. Get book suggestions based on similar users and filter by your favorite authors.
+Simply enter a user ID to receive personalized book recommendations, with the option to filter by your favorite authors.
 """)
 
 # -------------------- Sidebar Controls -------------------- #
@@ -136,7 +152,7 @@ if st.button("🔎 Get Recommendations"):
         cols = st.columns(2)
         for idx, row in recs.iterrows():
             with cols[idx % 2]:
-                st.image(row['image_url'], width=120)
+                st.image(row['image_url'], width=160)
                 st.markdown(f"**{row['title']}**<br><small>{row['authors']}</small><br><i>Score: {row['score']:.2f}</i>", unsafe_allow_html=True)
 else:
     st.info("Select a user and click 'Get Recommendations' to begin.")
@@ -154,6 +170,31 @@ top_chart = alt.Chart(top_books).mark_bar().encode(
 
 st.altair_chart(top_chart, use_container_width=True)
 
-# -------------------- Footer -------------------- #
-st.markdown("---")
-st.caption("Developed by Gogo Harrison | Powered by 3MTT, Streamlit, Altair & Scikit-learn")
+# ------- Custom footer with social media links ------- #
+st.markdown("""
+    <style>
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        z-index: 999;
+    }
+    .footer a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+    </style>
+    <div class="footer">
+        Developed by Gogo Harrison - ©2025 | Powered by 3MTT Learning Community
+        <br>
+        <a href="https://x.com/G_Harrison27" target="_blank">Twitter</a>
+        <a href="https://www.linkedin.com/in/gogo-harrison/" target="_blank">LinkedIn</a>
+        <a href="https://github.com/GogoHarry" target="_blank">GitHub</a>
+    </div>
+    """, unsafe_allow_html=True)
