@@ -5,8 +5,8 @@ An intelligent book recommendation system that leverages **Collaborative Filteri
 ---
 ## 🚀 Live Demo
 
-👉 [Try the App on Streamlit](https://gogoharry-8a8qjb75694amhhw6j5pb4.streamlit.app/)  
-📂 [View on GitHub](https://github.com/GogoHarry/book-recommender)
+👉 [Try the App on Streamlit](https://booksrecommendation.streamlit.app/)  
+📂 [View on GitHub](https://github.com/GogoHarry/Book-Recommendation-System)
 
 ---
 ## 📌 Project Overview
